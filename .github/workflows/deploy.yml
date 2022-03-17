@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  pages:
+    name: GitHub Pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: |
+            ~/.cargo/bin/mdbook
+            ~/.cargo/bin/obsidian-export
+          key: ${{ runner.os }}-cargo-binary-dependency
+      - name: Install Rust (rustup)
+        run: rustup update stable --no-self-update && rustup default stable
+      - name: Install obsidian-export
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: cargo install obsidian-export
+      - name: Obsidian export to mdbook-src
+        run: obsidian-export src mdbook-src
+      - name: Install mdBook
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: cargo install mdbook
+      - name: Build book
+        run: mdbook build
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: book

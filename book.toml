@@ -1,0 +1,24 @@
+[book]
+authors = ["MG_sooofeve"]
+language = "zh-CN"
+multilingual = false
+title = "TEST"
+src = "mdbook-src"
+
+[build]
+create-missing = false
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+google-analytics = "UA-160717450-2"
+git-repository-url = "https://github.com/mingjungeng/Knowledge-Test/"
+git-repository-icon = "fa-github"
+edit-url-template = "https://mingjungeng.github.io/Knowledge-Test/edit/main/{path}"
+
+[output.html.fold]
+enable = false
+level = 0
+
+[output.html.search]
+limit-results = 15
